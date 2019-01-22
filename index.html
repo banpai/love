@@ -1,0 +1,159 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,user-scalable=0"><title>王娆.我爱你</title><link href=/static/css/app.e187003e520264bc7fd165f04193a96b.css rel=stylesheet></head><style>html,body{
+      margin: 0;
+      padding: 0;
+      background: #ffe;
+    }</style><link type=text/css rel=stylesheet href=./static/Love_files/default.css><script type=text/javascript src=./static/Love_files/jquery.min.js></script><script type=text/javascript src=./static/Love_files/jscex.min.js></script><script type=text/javascript src=./static/Love_files/jscex-parser.js></script><script type=text/javascript src=./static/Love_files/jscex-jit.js></script><script type=text/javascript src=./static/Love_files/jscex-builderbase.min.js></script><script type=text/javascript src=./static/Love_files/jscex-async.min.js></script><script type=text/javascript src=./static/Love_files/jscex-async-powerpack.min.js></script><script type=text/javascript src=./static/Love_files/functions.js charset=utf-8></script><script type=text/javascript src=./static/Love_files/love.js charset=utf-8></script><body><div id=app></div><audio src=http://img.thinghigh.cn/love2.mp3 id=myaudio></audio><script>(function(){
+        window.animateTree = function(cb, cb2){
+        var canvas = $('#canvas');
+        var width = canvas.width();
+        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+          // this.type = 'mobile'
+          width = window.innerWidth;
+          var height = window.innerHeight;
+        } else {
+          // this.type = 'PC'
+          var height = canvas.height();
+        }
+        canvas.attr("width", width);
+        canvas.attr("height", height);
+        var dc = width / 2;
+        var binc = 535 - dc;
+        var opts = {
+          seed: {
+            x: dc,
+            color: "rgb(190, 26, 37)",
+            scale: 1
+          },
+          branch: [
+            [535 - binc, 680, 570 - binc, 250, 500 - binc, 200, 25, 230, 
+              [
+                [540 - binc, 500 - 10, 455 - binc, 417, 340 - binc, 400, 2, 250, [
+                  // [450 - binc + 80, 435 + 55, 434 - binc, 430, 394 - binc, 600, 1.5, 120],
+                  // [450- binc, 435, 434- binc, 430, 394- binc, 395, 2, 40]
+                ]],
+                [550 - binc, 445, 600 - binc, 356, 680 - binc, 345, 2, 200, [
+                //   [578 - binc, 400, 648 - binc, 409, 661 - binc, 426, 3, 80]
+                ]],
+                // [539 - binc, 281, 537 - binc, 248, 534 - binc, 217, 3, 40],
+                [546 - binc, 397, 413 - binc, 247, 328 - binc, 244, 2, 300, [
+                //   [427 - binc, 286, 383 - binc, 253, 371 - binc, 205, 2, 40],
+                //   [498 - binc, 345, 435 - binc, 315, 395 - binc, 330, 4, 60]
+                ]],
+                [546 - binc, 357, 608 - binc, 252, 678 - binc, 221, 1, 200, [
+                //   [590 - binc, 293, 646 - binc, 277, 648 - binc, 271, 2, 80]
+                ]]
+              ]
+            ]
+          ],
+          bloom: {
+            num: 350,
+            width: width,
+            height: 750,
+            r: 130
+          },
+          footer: {
+            width: 200,
+            height: 5,
+            speed: 10,
+          }
+        }
+        var tree = new Tree(canvas[0], width, height, opts);
+        var seed = tree.seed;
+        var foot = tree.footer;
+        var hold = 1;
+        canvas.click(function(e) {
+          var offset = canvas.offset(),
+            x, y;
+          x = e.pageX - offset.left;
+          y = e.pageY - offset.top;
+          if (seed.hover(x, y)) {
+            hold = 0;
+            canvas.unbind("click");
+            canvas.unbind("mousemove");
+            canvas.removeClass('hand');
+          }
+        }).mousemove(function(e) {
+          var offset = canvas.offset(),
+            x, y;
+          x = e.pageX - offset.left;
+          y = e.pageY - offset.top;
+          canvas.toggleClass('hand', seed.hover(x, y));
+        });
+        var seedAnimate = eval(Jscex.compile("async", function() {
+          seed.draw();
+          while (hold) {
+            $await(Jscex.Async.sleep(10));
+          }
+          while (seed.canScale()) {
+            seed.scale(0.95);
+            cb2 && cb2();
+            $await(Jscex.Async.sleep(10));
+          }
+          while (seed.canMove()) {
+            seed.move(0, 2);
+            foot.draw();
+            $await(Jscex.Async.sleep(10));
+          }
+        }));
+        var growAnimate = eval(Jscex.compile("async", function() {
+          do {
+            tree.grow();
+            $await(Jscex.Async.sleep(10));
+          } while (tree.canGrow());
+        }));
+        var flowAnimate = eval(Jscex.compile("async", function() {
+          do {
+            tree.flower(2);
+            $await(Jscex.Async.sleep(10));
+          } while (tree.canFlower());
+        }));
+        var moveAnimate = eval(Jscex.compile("async", function() {
+          var imgURI = document.getElementById('canvas').toDataURL("image/png");
+          cb && cb(imgURI)
+          // tree.snapshot("p1", 240, 0, 610, 680);
+          // while (tree.move("p1", 100, 0)) {
+          //   foot.draw();
+          //   $await(Jscex.Async.sleep(10));
+          // }
+          // foot.draw();
+          // tree.snapshot("p2", 500, 0, 610, 680);
+          // // 会有闪烁不得意这样做, (＞﹏＜)
+          // canvas.parent().css("background", "url(" + tree.toDataURL('image/png') + ")");
+          // canvas.css("background", "#ffe");
+          // $await(Jscex.Async.sleep(300));
+          // canvas.css("background", "none");
+        }));
+        var jumpAnimate = eval(Jscex.compile("async", function() {
+          var ctx = tree.ctx;
+          while (true) {
+            tree.ctx.clearRect(0, 0, width, height);
+            tree.jump();
+            // foot.draw();
+            $await(Jscex.Async.sleep(25));
+          }
+        }));
+        var textAnimate = eval(Jscex.compile("async", function() {
+          var together = new Date("2018-12-18 16:08:39");
+          // together.setFullYear(2018, 12, 8);
+          // together.setHours(20);
+          // together.setMinutes(20);
+          // together.setSeconds(0);
+          // together.setMilliseconds(0);
+          $("#code").show().typewriter();
+          $("#clock-box").fadeIn(500);
+          while (true) {
+            timeElapse(together);
+            $await(Jscex.Async.sleep(1000));
+          }
+        }));
+        var runAsync = eval(Jscex.compile("async", function() {
+          $await(seedAnimate());
+          $await(growAnimate());
+          $await(flowAnimate());
+          $await(moveAnimate());
+          textAnimate().start();
+          $await(jumpAnimate());
+        }));
+        runAsync().start();
+       }
+      })();</script><script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.42fc6c515ccdfe89bd76.js></script><script type=text/javascript src=/static/js/app.0a566cc0f0e80662317f.js></script></body></html>
